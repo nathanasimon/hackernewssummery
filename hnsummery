@@ -1,0 +1,25 @@
+import requests
+from bs4 import BeautifulSoup
+import openai
+from openai import OpenAI
+
+# Put OpenAI API key here
+client = OpenAI(
+    api_key="OPENAI_API_KEY"
+)
+
+url = "https://news.ycombinator.com/"
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'html.parser')
+titles = soup.select('td:nth-child(3) > span:nth-child(1) > a:nth-child(1)')
+
+completion = client.chat.completions.create(
+        model="gpt-4-turbo-preview",
+        messages=[
+            {"role": "user", "content": "These is the titles of the most recent hackernews posts:" + str(titles) + ". Explain what this post might be about."},
+        ]
+)
+
+output_text = completion.choices[0].message.content
+
+print("Summary of Hacker News discussions:", output_text)
