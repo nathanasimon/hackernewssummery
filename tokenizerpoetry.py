@@ -9,8 +9,11 @@ enc = tiktoken.encoding_for_model("gpt-4")
 # Load the tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
 
+load_dotenv()
+# Load the API key from the .env file
+api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(
-  api_key="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"  # Use the API key loaded from the .env file
+  api_key=api_key  # Use the API key loaded from the .env file
 )
 
 # Ask the user to input the topic of their haiku
@@ -34,8 +37,5 @@ multiplied_tokens = [token + 2 for token in tokenized_haiku]
 
 # Convert the multiplied tokens back to text
 detokenized_haiku = tokenizer.decode(multiplied_tokens)
-
-
-
 
 print("Your haiku: ", detokenized_haiku)
